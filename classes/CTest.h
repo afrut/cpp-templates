@@ -8,21 +8,26 @@ using namespace std; // for string class
 class CTest
 {
     public:
+        // constructors can be used to set different attributes upon creation
         CTest(); // default constructor
 		CTest( const char * name ); // another type of constructor
 		CTest( int p, const char * name ); // yet another type of constructor
 		CTest( int p ); // again, another type of constructor
-        virtual ~CTest(); // default destructor
+
+        // default destructor
+        virtual ~CTest();
 
     private:
         int m_val;
 		string m_name;
     
     public:
+        // setters
         void setVal( int p ) { m_val = p; };
 		void setName(const char* p) { m_name = p; };
     
     public:
+        // getters
         int getVal() const { return m_val; };
 		const string& getName() const { return m_name; };
         void print();

@@ -61,6 +61,7 @@ CTest CTest::operator=( const CTest& a ) const
 
 
 
+// for displaying object contents
 void CTest::print()
 {
     cout << m_name << ":\n";

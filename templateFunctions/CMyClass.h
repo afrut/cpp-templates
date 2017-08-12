@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// class containing attributes of different types
 class CMyClass
 {
     public:
@@ -32,6 +33,8 @@ class CMyClass
 
     public: 
         void print();
+
+        // + operator has to be overloaded to use the add function
         CMyClass operator+( const CMyClass& a ) const;
 };
 

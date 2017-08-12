@@ -1,4 +1,4 @@
-// add any two types
+// implementation of the add function for any two types
 template <typename T>
 T add ( T t1, T t2 )
 {
