@@ -2,23 +2,52 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <tchar.h>
+#include <thread> // for sleep_for() 
+#include <chrono> // for seconds()
 
-using namespace std;
 
 // Forward declarations:
-BOOL GetProcessList();
-BOOL ListProcessModules(DWORD dwPID);
-BOOL ListProcessThreads(DWORD dwOwnerPID);
+BOOL getProcess( const char* processName, PROCESSENTRY32* ret );
 void printError(TCHAR* msg);
+
+
 
 int main( void )
 {
-	GetProcessList();
-	cin.get();
+    // memory value
+    int memVal;
+
+    // retrieve the PROCESSENTRY32 structure containing process information
+    PROCESSENTRY32 pe32;
+	BOOL ret = getProcess( "whileLoop.exe", &pe32 );
+    std::cout << std::hex << "Process ID: " << pe32.th32ProcessID << "\n";
+
+    // open handle to the target process
+    HANDLE hProcess = OpenProcess(PROCESS_VM_READ, 0, pe32.th32ProcessID);
+
+    // define the target's memory address that you would like to read
+    LPCVOID address = (LPCVOID)0x00B1D138;
+
+    while( true )
+    {
+        // read the memory address of target process
+        ReadProcessMemory( hProcess, address, &memVal, sizeof(memVal), 0 );
+
+        std::cout << "Address " << std::hex << address <<
+                " has value " << std::dec << memVal << "\n";
+        std::this_thread::sleep_for( std::chrono::seconds(1) );
+    }
+
+    // close handle to the target process
+    CloseHandle( hProcess );
+
 	return 0;
 }
 
-BOOL GetProcessList()
+
+
+// used to retrieve the process ID using the process name
+BOOL getProcess( const char* processName, PROCESSENTRY32* ret )
 {
 	HANDLE hProcessSnap;
 	HANDLE hProcess;
@@ -49,38 +78,11 @@ BOOL GetProcessList()
 	// display information about each process in turn
 	do
 	{
-		//_tprintf(TEXT("\n\n====================================================="));
 		if (strcmp(pe32.szExeFile, "whileLoop.exe") == 0)
 		{
-			_tprintf(TEXT("\nPROCESS NAME:  %s"), pe32.szExeFile);
-			_tprintf(TEXT("\n  Process ID        = 0x%08X"), pe32.th32ProcessID);
+            *ret = pe32;
+            break;
 		}
-		//_tprintf(TEXT("\n-------------------------------------------------------"));
-
-		// Retrieve the priority class.
-		//dwPriorityClass = 0;
-		//hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
-		/*if (hProcess == NULL)
-			printError(TEXT("OpenProcess"));
-		else
-		{
-			dwPriorityClass = GetPriorityClass(hProcess);
-			if (!dwPriorityClass)
-				printError(TEXT("GetPriorityClass"));
-			CloseHandle(hProcess);
-		}
-
-		_tprintf(TEXT("\n  Process ID        = 0x%08X"), pe32.th32ProcessID);
-		_tprintf(TEXT("\n  Thread count      = %d"), pe32.cntThreads);
-		_tprintf(TEXT("\n  Parent process ID = 0x%08X"), pe32.th32ParentProcessID);
-		_tprintf(TEXT("\n  Priority base     = %d"), pe32.pcPriClassBase);
-		if (dwPriorityClass)
-			_tprintf(TEXT("\n  Priority class    = %d"), dwPriorityClass);*/
-
-		// List the modules and threads associated with this process
-		//ListProcessModules(pe32.th32ProcessID);
-		//ListProcessThreads(pe32.th32ProcessID);
-
 	} while (Process32Next(hProcessSnap, &pe32));
 
 	CloseHandle(hProcessSnap);
@@ -88,89 +90,7 @@ BOOL GetProcessList()
 }
 
 
-BOOL ListProcessModules(DWORD dwPID)
-{
-	HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
-	MODULEENTRY32 me32;
-
-	// Take a snapshot of all modules in the specified process.
-	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwPID);
-	if (hModuleSnap == INVALID_HANDLE_VALUE)
-	{
-		printError(TEXT("CreateToolhelp32Snapshot (of modules)"));
-		return(FALSE);
-	}
-
-	// Set the size of the structure before using it.
-	me32.dwSize = sizeof(MODULEENTRY32);
-
-	// Retrieve information about the first module,
-	// and exit if unsuccessful
-	if (!Module32First(hModuleSnap, &me32))
-	{
-		printError(TEXT("Module32First"));  // show cause of failure
-		CloseHandle(hModuleSnap);           // clean the snapshot object
-		return(FALSE);
-	}
-
-	// Now walk the module list of the process,
-	// and display information about each module
-	do
-	{
-		_tprintf(TEXT("\n\n     MODULE NAME:     %s"), me32.szModule);
-		_tprintf(TEXT("\n     Executable     = %s"), me32.szExePath);
-		_tprintf(TEXT("\n     Process ID     = 0x%08X"), me32.th32ProcessID);
-		_tprintf(TEXT("\n     Ref count (g)  = 0x%04X"), me32.GlblcntUsage);
-		_tprintf(TEXT("\n     Ref count (p)  = 0x%04X"), me32.ProccntUsage);
-		_tprintf(TEXT("\n     Base address   = 0x%08X"), (DWORD)me32.modBaseAddr);
-		_tprintf(TEXT("\n     Base size      = %d"), me32.modBaseSize);
-
-	} while (Module32Next(hModuleSnap, &me32));
-
-	CloseHandle(hModuleSnap);
-	return(TRUE);
-}
-
-BOOL ListProcessThreads(DWORD dwOwnerPID)
-{
-	HANDLE hThreadSnap = INVALID_HANDLE_VALUE;
-	THREADENTRY32 te32;
-
-	// Take a snapshot of all running threads  
-	hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
-	if (hThreadSnap == INVALID_HANDLE_VALUE)
-		return(FALSE);
-
-	// Fill in the size of the structure before using it. 
-	te32.dwSize = sizeof(THREADENTRY32);
-
-	// Retrieve information about the first thread,
-	// and exit if unsuccessful
-	if (!Thread32First(hThreadSnap, &te32))
-	{
-		printError(TEXT("Thread32First")); // show cause of failure
-		CloseHandle(hThreadSnap);          // clean the snapshot object
-		return(FALSE);
-	}
-
-	// Now walk the thread list of the system,
-	// and display information about each thread
-	// associated with the specified process
-	do
-	{
-		if (te32.th32OwnerProcessID == dwOwnerPID)
-		{
-			_tprintf(TEXT("\n\n     THREAD ID      = 0x%08X"), te32.th32ThreadID);
-			_tprintf(TEXT("\n     Base priority  = %d"), te32.tpBasePri);
-			_tprintf(TEXT("\n     Delta priority = %d"), te32.tpDeltaPri);
-			_tprintf(TEXT("\n"));
-		}
-	} while (Thread32Next(hThreadSnap, &te32));
-
-	CloseHandle(hThreadSnap);
-	return(TRUE);
-}
-
+// used to print errors in function getProcess
 void printError(TCHAR* msg)
 {
 	DWORD eNum;

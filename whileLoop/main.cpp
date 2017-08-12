@@ -12,7 +12,9 @@ int main()
     while(true)
     {
         counter++;
-        cout << "counter = " << counter << "\n";
+		cout << "counter = " << dec << counter;
+		cout << " counter address = " <<
+			 hex << &counter << "\n";
         this_thread::sleep_for(chrono::seconds(2));
     }
 }

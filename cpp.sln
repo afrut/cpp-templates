@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "whileLoop", "whileLoop\whil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simpleMemRead", "simpleMemRead\simpleMemRead.vcxproj", "{2C47BAAA-E220-4D93-869B-E9BCF5E45612}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "processlist", "processlist\processlist.vcxproj", "{D80AD36D-E759-410D-93F0-BB41CB73C0A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{2C47BAAA-E220-4D93-869B-E9BCF5E45612}.Release|x64.Build.0 = Release|x64
 		{2C47BAAA-E220-4D93-869B-E9BCF5E45612}.Release|x86.ActiveCfg = Release|Win32
 		{2C47BAAA-E220-4D93-869B-E9BCF5E45612}.Release|x86.Build.0 = Release|Win32
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Debug|x64.ActiveCfg = Debug|x64
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Debug|x64.Build.0 = Debug|x64
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Debug|x86.ActiveCfg = Debug|Win32
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Debug|x86.Build.0 = Debug|Win32
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x64.ActiveCfg = Release|x64
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x64.Build.0 = Release|x64
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x86.ActiveCfg = Release|Win32
+		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
