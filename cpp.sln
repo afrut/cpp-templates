@@ -15,7 +15,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "whileLoop", "whileLoop\whil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simpleMemRead", "simpleMemRead\simpleMemRead.vcxproj", "{2C47BAAA-E220-4D93-869B-E9BCF5E45612}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "processlist", "processlist\processlist.vcxproj", "{D80AD36D-E759-410D-93F0-BB41CB73C0A9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "processList", "processlist\processlist.vcxproj", "{D80AD36D-E759-410D-93F0-BB41CB73C0A9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "toolHelp", "toolHelp\toolHelp.vcxproj", "{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,14 @@ Global
 		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x64.Build.0 = Release|x64
 		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x86.ActiveCfg = Release|Win32
 		{D80AD36D-E759-410D-93F0-BB41CB73C0A9}.Release|x86.Build.0 = Release|Win32
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Debug|x64.ActiveCfg = Debug|x64
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Debug|x64.Build.0 = Debug|x64
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Debug|x86.Build.0 = Debug|Win32
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Release|x64.ActiveCfg = Release|x64
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Release|x64.Build.0 = Release|x64
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Release|x86.ActiveCfg = Release|Win32
+		{7A2CC74C-6982-49D3-9C0A-D6A37FBB08FA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
