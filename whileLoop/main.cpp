@@ -26,6 +26,7 @@ int main()
 			 hex << &counter << "\n";
 
         // pause execution for 2 seconds
-        this_thread::sleep_for(chrono::seconds(2));
+        // this_thread::sleep_for(chrono::seconds(2));
+        getchar();
     }
 }
