@@ -22,7 +22,7 @@ int main()
 		cout << "counter = " << dec << counter;
 
         // display address of counter
-		cout << " counter address = " <<
+		cout << " counter address = 0x" <<
 			 hex << &counter << "\n";
 
         // pause execution for 2 seconds
