@@ -1,17 +1,14 @@
 // this program contains an infinite while loop that increments
 // a global variable
 
-// this program was intended to be used as a target process
-// for memory reading by a separate program
-
 #include <iostream>
 #include <thread> // for sleep_for()
 #include <chrono> // for seconds()
 
 using namespace std;
 
-// target global variable for memory reading
-long counter;
+// global variable
+int counter;
 
 int main()
 {
