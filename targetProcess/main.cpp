@@ -5,19 +5,14 @@
 
 // declare some global variables of all fundamental types
 bool                    gblBool = true;
-
 char                    gblChar = 0;
 unsigned char           gblUChar = 0;
-
 short                   gblShort = 0;
 unsigned short          gblUShort = 0;
-
 int                     gblInt = 0;
 unsigned int            gblUInt = 0;
-
 float                   gblFloat = 0;
 double                  gblDouble = 0;
-
 long                    gblLong = 0;
 unsigned long           gblULong = 0;
 
@@ -53,6 +48,7 @@ void main()
         printf( "gblDouble       = %-8.2f(0x%p)\n", gblDouble, (void*)&gblDouble );
         printf( "gblLong         = %-8d(0x%p)\n", gblLong, (void*)&gblLong );
         printf( "gblULong        = %-8d(0x%p)\n", gblULong, (void*)&gblULong );
+		printf( "Hit return to increment/toggle values\n" );
 
         // pause to view values
         getchar();
