@@ -8,45 +8,123 @@ using namespace std;
 // Class Tank
 // ----------------------------------------------------------------------
 Tank::Tank() :
-     m_temperature(20)
-    ,m_mix(50)
-    ,m_level(50)
+     m_tempMin(45)
+    ,m_tempMax(60)
+    ,m_level(min_level)
+    ,m_temp(min_temp)
 {
-    m_state = (State*)new Tank::Idle(*this);
-}
-
-Tank::Tank(int temperature, int mix, int level)
-{
-    m_temperature = min(max(temperature, 15), 150);
-    m_mix = min(max(mix, 0), 100);
-    m_level = min(max(level, 0), 100);
-    m_state = (State*)new Tank::Idle(*this);
+    m_state = (State*)new Tank::Empty(*this);
+    m_state->enter();
+    this->fill(50, 25);
 }
 
 Tank::~Tank() {delete m_state;}
 
-void Tank::fill(int amt) {m_state->fill(amt);}
-string Tank::toString() {return m_state->toString();}
-
-// ----------------------------------------------------------------------
-// Class Tank::State common methods
-// ----------------------------------------------------------------------
-int Tank::State::fill(int amt)
+// delegate the fill operation to whatever state is active at the time
+void Tank::fill(int amt, int temp)
 {
     int overflow = amt;
-    m_context.fill(1);    
-    return overflow * -1;
+    while(overflow > 0) overflow = m_state->fill(overflow, temp);
 }
 
-int Tank::State::drain(int amt) {return 0;}
-void Tank::State::stir(int sec) {}
-void Tank::State::heat(int sec) {}
+// delegate the string representation to whatever state is active at the time
+string Tank::toString() {return m_state->toString();}
+
+void Tank::updateState()
+{
+    // the order in which the conditionals are checked here imply
+    // a priority order between the states
+    if(m_level <= min_level)
+    {
+        m_state->exit();
+        delete m_state;
+        m_state = (State*)new Empty(*this);
+        m_state->enter();
+    }
+    else if(m_temp < m_tempMin)
+    {
+        m_state->exit();
+        delete m_state;
+        m_state = (State*) new Cold(*this);
+        m_state->enter();
+    }
+    else if(m_temp > m_tempMax)
+    {
+        m_state->exit();
+        delete m_state;
+        m_state = (State*) new Hot(*this);
+        m_state->enter();
+    }
+    else
+    {
+        m_state->exit();
+        delete m_state;
+        m_state = (State*) new Normal(*this);
+        m_state->enter();
+    }
+}
 
 // ----------------------------------------------------------------------
-// Class Tank::State::Idle
+// Class Tank::Empty
 // ----------------------------------------------------------------------
-int Tank::Idle::fill(int amt)
+int Tank::Empty::fill(int amt, int temp)
 {
-    cout << "Idle fill";
+    m_context.m_level++;
+    amt--;
+    m_context.m_temp = temp;
+    m_context.updateState();    // as soon as m_level > 0, tank state should change
+    return amt;
+}
+
+void Tank::Empty::enter()
+{
+    cout << "Tank is " << this->toString() << "\n";
+}
+
+void Tank::Empty::exit()
+{}
+
+// ----------------------------------------------------------------------
+// Class Tank::Cold
+// ----------------------------------------------------------------------
+int Tank::Cold::fill(int amt, int temp)
+{
     return 0;
 }
+
+void Tank::Cold::enter()
+{
+    cout << "Tank is " << this->toString() << "\n";
+}
+
+void Tank::Cold::exit() {}
+
+// ----------------------------------------------------------------------
+// Class Tank::Hot
+// ----------------------------------------------------------------------
+int Tank::Hot::fill(int amt, int temp)
+{
+    return 0;
+}
+
+void Tank::Hot::enter()
+{
+    cout << "Tank is " << this->toString() << "\n";
+}
+
+void Tank::Hot::exit() {}
+
+// ----------------------------------------------------------------------
+// Class Tank::Normal
+// ----------------------------------------------------------------------
+int Tank::Normal::fill(int amt, int temp)
+{
+    return 0;
+}
+
+void Tank::Normal::enter()
+{
+    cout << "Tank is " << this->toString() << "\n";
+}
+
+void Tank::Normal::exit() {}
