@@ -16,7 +16,7 @@ Tank::Tank() :
 {
     m_state = (State*)new Tank::Empty(*this);
     m_state->enter();
-    this->fill(50, 25);
+    this->fill(100, 25);
 }
 
 Tank::~Tank() {delete m_state;}
@@ -28,7 +28,8 @@ int Tank::fill(int amt, int temp)
     while(m_amt > 0)
     {
         State* newState = m_state->fill(temp);
-        if(newState) this->changeState(newState);
+        if(newState)
+            this->changeState(newState);
         cout << "  Tank temp = " << this->temp() << "\n";
         if(m_state->toString() == std::string("Full"))
             break;
@@ -43,10 +44,14 @@ string Tank::toString() {return m_state->toString();}
 
 void Tank::changeState(State* newState)
 {
-    m_state->exit();
-    delete m_state;
-    m_state = newState;
-    newState->enter();
+    while(newState)
+    {
+        m_state->exit();
+        delete m_state;
+        m_state = newState;
+        m_state->enter();
+        newState = m_state->transition();   // immediately check for state transition
+    }
 }
 
 // ----------------------------------------------------------------------
@@ -100,7 +105,10 @@ Tank::State* Tank::Full::transition()
     return NULL;
 }
 
-void Tank::Full::enter() {cout << "Tank is " << this->toString() << "\n";}
+void Tank::Full::enter()
+{
+    cout << "Tank is " << this->toString() << "\n";
+}
 void Tank::Full::exit() {}
 
 // ----------------------------------------------------------------------
